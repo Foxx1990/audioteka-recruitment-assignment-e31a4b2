@@ -43,7 +43,6 @@ class Cart implements \App\Service\Cart\Cart
         );
     }
 
-    #[Pure]
     public function isFull(): bool
     {
         return $this->products->count() >= self::CAPACITY;
@@ -54,7 +53,6 @@ class Cart implements \App\Service\Cart\Cart
         return $this->products->getIterator();
     }
 
-    #[Pure]
     public function hasProduct(\App\Entity\Product $product): bool
     {
         return $this->products->contains($product);

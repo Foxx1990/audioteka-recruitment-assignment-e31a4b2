@@ -45,4 +45,9 @@ class CartRepository implements CartService
 
         return $cart;
     }
+
+    public function getCart(string $cartId): Cart
+    {
+        return $this->entityManager->find(\App\Entity\Cart::class, $cartId);
+    }
 }
