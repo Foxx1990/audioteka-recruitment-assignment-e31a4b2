@@ -53,18 +53,39 @@ class Cart implements \App\Service\Cart\Cart
         return $this->products->getIterator();
     }
 
-    public function hasProduct(\App\Entity\Product $product): bool
+    public function hasProduct(Product $product): bool
     {
-        return $this->products->contains($product);
+        foreach ($this->products as $cartProduct) {
+            if ($cartProduct->getProduct() === $product) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public function addProduct(\App\Entity\Product $product): void
+    public function addProduct(Product $product): void
     {
-        $this->products->add($product);
+        foreach ($this->products as $cartProduct) {
+            if ($cartProduct->getProduct() === $product) {
+                $cartProduct->increaseQuantity();
+                return;
+            }
+        }
+
+        $this->products->add(new CartProduct($this, $product));
     }
 
-    public function removeProduct(\App\Entity\Product $product): void
+    public function removeProduct(Product $product): void
     {
-        $this->products->removeElement($product);
+        foreach ($this->products as $cartProduct) {
+            if ($cartProduct->getProduct() === $product) {
+                if ($cartProduct->getQuantity() > 1) {
+                    $cartProduct->decreaseQuantity();
+                } else {
+                    $this->products->removeElement($cartProduct);
+                }
+                return;
+            }
+        }
     }
 }

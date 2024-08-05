@@ -14,10 +14,10 @@ class CartRepository implements CartService
 
     public function addProduct(string $cartId, string $productId): void
     {
-        $cart = $this->entityManager->find(\App\Entity\Cart::class, $cartId);
+        $cart = $this->entityManager->find(Cart::class, $cartId);
         $product = $this->entityManager->find(Product::class, $productId);
 
-        if ($cart && $product && !$cart->hasProduct($product)) {
+        if ($cart && $product) {
             $cart->addProduct($product);
             $this->entityManager->persist($cart);
             $this->entityManager->flush();
@@ -26,10 +26,10 @@ class CartRepository implements CartService
 
     public function removeProduct(string $cartId, string $productId): void
     {
-        $cart = $this->entityManager->find(\App\Entity\Cart::class, $cartId);
+        $cart = $this->entityManager->find(Cart::class, $cartId);
         $product = $this->entityManager->find(Product::class, $productId);
 
-        if ($cart && $product && $cart->hasProduct($product)) {
+        if ($cart && $product) {
             $cart->removeProduct($product);
             $this->entityManager->persist($cart);
             $this->entityManager->flush();
